@@ -152,7 +152,21 @@ const Applications = () => {
 							<td className="px-6 py-4">{app.petId?.age}</td>
 							<td className="px-6 py-4">{app.petId?.adoptionFee}</td>
 							<td className="px-6 py-4">
-								{app.status === 0 ? 'Pending' : 'Completed'}
+								<div
+									className={`${
+										app.status === 0
+											? 'bg-yellow-600 '
+											: app.status === 1
+											? 'bg-green-600'
+											: 'bg-red-600'
+									} px-2 py-1 rounded-md text- text-center text-white`}
+								>
+									{app.status === 0
+										? 'Pending'
+										: app.status === 1
+										? 'Approved'
+										: 'Rejected'}
+								</div>
 							</td>
 							<td className="px-6 py-4">
 								<button
