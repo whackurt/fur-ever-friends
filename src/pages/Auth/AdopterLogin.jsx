@@ -19,6 +19,7 @@ const AdopterLogin = () => {
 		console.log(res);
 		if (res.status == 200) {
 			localStorage.setItem('adopterToken', res.data.adopterToken);
+			localStorage.setItem('adopterId', res.data.id);
 			navigate('/');
 		} else {
 			setError(true);
