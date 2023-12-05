@@ -17,6 +17,7 @@ const ViewPet = () => {
 
 	const adoptPet = async () => {
 		const now = new Date(Date.now());
+
 		const res = await CreateApplication({
 			applicationDate: now.toISOString(),
 			adopterId: localStorage.getItem('adopterId'),
@@ -130,6 +131,7 @@ const ViewPet = () => {
 							</p>
 
 							<button
+								disabled={!petDetails.availableForAdoption}
 								onClick={toggleModal}
 								className="bg-primary w-full hover:bg-secondary text-white font-bold py-2 px-4 rounded"
 							>
