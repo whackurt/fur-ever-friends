@@ -11,52 +11,29 @@ const AdopterSignup = () => {
 	const [password, setPassword] = useState('');
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(false);
-	const [complete, setComplete] = useState(false);
-	const [fillMsg, setFillMsg] = useState('');
 	const navigate = useNavigate();
 
-	const validate = () => {
-		setComplete(true);
-		if (
-			name === '' ||
-			address === '' ||
-			email === '' ||
-			password === '' ||
-			phone === ''
-		) {
-			setComplete(false);
-			setFillMsg('Please enter all the required fields.');
-		} else {
-			setComplete(true);
-			setFillMsg('');
-		}
-	};
-
 	const signup = async () => {
-		validate();
-
 		setError(false);
 		setLoading(true);
 
-		if (complete) {
-			const res = await SignupAdopter({
-				email: email,
-				password: password,
-				name: name,
-				address: address,
-				phone: phone,
-			});
+		const res = await SignupAdopter({
+			email: email,
+			password: password,
+			name: name,
+			address: address,
+			phone: phone,
+		});
 
-			if (res.status == 201) {
-				const res = await LoginAdopter({ email: email, password: password });
+		if (res.status == 201) {
+			const res = await LoginAdopter({ email: email, password: password });
 
-				if (res.status == 200) {
-					localStorage.setItem('adopterToken', res.data.adopterToken);
-					navigate('/');
-				}
-			} else {
-				setError(true);
+			if (res.status == 200) {
+				localStorage.setItem('adopterToken', res.data.adopterToken);
+				navigate('/');
 			}
+		} else {
+			setError(true);
 		}
 
 		setLoading(false);
@@ -127,13 +104,12 @@ const AdopterSignup = () => {
 						<div className="text-center text-red-500 text-xs">
 							{error ? 'Invalid signup.' : null}
 						</div>
-						<div className="text-center text-red-500 text-xs">{fillMsg}</div>
 					</form>
 					<button
 						onClick={() => signup()}
 						className="border w-full rounded-md my-5 py-2 bg-primary hover:bg-secondary text-white"
 					>
-						Sign Up
+						{loading ? 'Signing up...' : 'Sign Up'}
 					</button>
 					<div className="flex justify-center">
 						<p className="text-xs">Already have an account? </p>

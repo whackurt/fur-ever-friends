@@ -8,7 +8,6 @@ const Home = () => {
 	useEffect(() => {
 		const getAllPets = async () => {
 			const res = await GetPets();
-			console.log(res.data.data.pets);
 			setPets(res.data.data.pets);
 		};
 
