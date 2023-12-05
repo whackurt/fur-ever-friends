@@ -16,7 +16,7 @@ const AdopterLogin = () => {
 		setLoading(true);
 
 		const res = await LoginAdopter({ email: email, password: password });
-		console.log(res);
+
 		if (res.status == 200) {
 			localStorage.setItem('adopterToken', res.data.adopterToken);
 			localStorage.setItem('adopterId', res.data.id);
@@ -24,6 +24,7 @@ const AdopterLogin = () => {
 		} else {
 			setError(true);
 		}
+
 		setLoading(false);
 	};
 
@@ -65,7 +66,7 @@ const AdopterLogin = () => {
 						onClick={login}
 						className="border w-full rounded-md my-5 py-2 bg-primary hover:bg-secondary text-white"
 					>
-						Log In
+						{loading ? 'Logging in...' : 'Log In'}
 					</button>
 					<div className="flex justify-center">
 						<p className="text-xs">New to Pet Adoption System? </p>

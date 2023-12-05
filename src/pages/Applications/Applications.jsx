@@ -1,19 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { MdDeleteOutline } from 'react-icons/md';
+import {
+	DeleteApplicationById,
+	GetApplicationByAdopterId,
+} from '../../services/Applications/applications.services';
+import moment from 'moment/moment';
 
 const Applications = () => {
 	let { id } = useParams();
 	const [showModal, setShowModal] = useState(false);
+	const [applications, setApplications] = useState([]);
+	const [idToDelete, setIdToDelete] = useState(null);
+	const [revokeSuccess, setRevokeSuccess] = useState(false);
+
 	const toggleModal = () => {
 		setShowModal(!showModal);
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-
-		setShowModal(false);
+	const revoke = async () => {
+		const res = await DeleteApplicationById(idToDelete);
+		console.log(res);
+		if (res.status === 200) {
+			setRevokeSuccess(true);
+		}
 	};
+
+	const okay = () => {
+		getApplications();
+		setShowModal(!showModal);
+		setRevokeSuccess(false);
+		setIdToDelete(null);
+	};
+
+	const getApplications = async () => {
+		const res = await GetApplicationByAdopterId(
+			localStorage.getItem('adopterId')
+		);
+		setApplications(res.data.data.applications);
+	};
+
+	useEffect(() => {
+		getApplications();
+	}, []);
+
+	useEffect(() => {
+		console.log(idToDelete);
+	}, [idToDelete]);
 
 	return (
 		<div className="overflow-x-auto w-full">
@@ -27,21 +60,34 @@ const Applications = () => {
 							&times;
 						</span>
 						<h2 className="font-bold">Revoke Application</h2>
-						<form onSubmit={handleSubmit}>
+						<div>
 							<div className="flex py-4">
 								<p className="">
-									Are you sure you want to revoke this application?
+									{revokeSuccess
+										? 'Application revoked successfully.'
+										: 'Are you sure you want to revoke this application?'}
 								</p>
 							</div>
 							<div className="flex justify-end">
-								<button
-									type="submit"
-									className="mt-4 bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded"
-								>
-									Revoke
-								</button>
+								{revokeSuccess ? (
+									<button
+										onClick={() => okay()}
+										type="submit"
+										className="mt-4 bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded"
+									>
+										Okay
+									</button>
+								) : (
+									<button
+										onClick={() => revoke()}
+										type="submit"
+										className="mt-4 bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded"
+									>
+										Revoke
+									</button>
+								)}
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			)}
@@ -82,27 +128,44 @@ const Applications = () => {
 						</th>
 					</tr>
 				</thead>
+				{applications.length === 0 ? (
+					<div className="flex justify-center py-4">
+						No Application Data Available
+					</div>
+				) : null}
+
 				<tbody>
-					<tr className="bg-white border-b ">
-						<th
-							scope="row"
-							className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-						>
-							656d89ac8ea5ce5cfd2dfd4e
-						</th>
-						<td className="px-6 py-4">Dec 12, 2023</td>
-						<td className="px-6 py-4">Ember</td>
-						<td className="px-6 py-4">Dog</td>
-						<td className="px-6 py-4">Jack Russell Terrier</td>
-						<td className="px-6 py-4">1.5</td>
-						<td className="px-6 py-4">6000</td>
-						<td className="px-6 py-4">Pending</td>
-						<td className="px-6 py-4">
-							<button onClick={toggleModal}>
-								<MdDeleteOutline color="#b50e1a" size={20} />
-							</button>
-						</td>
-					</tr>
+					{applications.map((app) => (
+						<tr className="bg-white border-b ">
+							<th
+								scope="row"
+								className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+							>
+								{app._id}
+							</th>
+							<td className="px-6 py-4">
+								{moment(app.applicationDate).format('MMM D, YYYY')}
+							</td>
+							<td className="px-6 py-4">{app.petId?.name}</td>
+							<td className="px-6 py-4">{app.petId?.animalType}</td>
+							<td className="px-6 py-4">{app.petId?.breed}</td>
+							<td className="px-6 py-4">{app.petId?.age}</td>
+							<td className="px-6 py-4">{app.petId?.adoptionFee}</td>
+							<td className="px-6 py-4">
+								{app.status === 0 ? 'Pending' : 'Completed'}
+							</td>
+							<td className="px-6 py-4">
+								<button
+									onClick={() => {
+										setIdToDelete(app._id);
+										toggleModal();
+									}}
+								>
+									<MdDeleteOutline color="#b50e1a" size={20} />
+								</button>
+							</td>
+						</tr>
+					))}
 				</tbody>
 			</table>
 		</div>

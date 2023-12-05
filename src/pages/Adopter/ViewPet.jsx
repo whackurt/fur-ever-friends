@@ -1,29 +1,47 @@
-import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { GetPetById } from '../../services/Pet/pet.services';
+import { CreateApplication } from '../../services/Applications/applications.services';
 
 const ViewPet = () => {
 	const { id } = useParams();
 	const [showModal, setShowModal] = useState(false);
-	const petDetails = {
-		_id: id,
-		name: 'Fluffy',
-		age: '2',
-		breed: 'Labrador',
-		animalType: 'Dog',
-		adoptionFee: 6000,
-		availableForAdoption: false,
-	};
+	const [adoptSuccess, setAdoptSuccess] = useState(false);
+	const [petDetails, setPetDetails] = useState({});
+
+	const navigate = useNavigate();
 
 	const toggleModal = () => {
 		setShowModal(!showModal);
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
+	const adoptPet = async () => {
+		const now = new Date(Date.now());
+		const res = await CreateApplication({
+			applicationDate: now.toISOString(),
+			adopterId: localStorage.getItem('adopterId'),
+			petId: petDetails._id,
+			status: 0,
+		});
 
-		console.log(formData);
-		setShowModal(false);
+		if (res.status === 201) {
+			setAdoptSuccess(true);
+		}
 	};
+
+	const okay = () => {
+		setShowModal(false);
+		navigate('/applications');
+	};
+
+	useEffect(() => {
+		const getPet = async () => {
+			const res = await GetPetById(id);
+			setPetDetails(res.data.data.pet);
+		};
+
+		getPet();
+	}, []);
 
 	return (
 		<div className="container mx-4 my-8 p-4 bg-white rounded shadow-lg w-3/4">
@@ -36,20 +54,37 @@ const ViewPet = () => {
 						>
 							&times;
 						</span>
-						<h2 className="font-bold">Confirm Application</h2>
-						<form onSubmit={handleSubmit}>
+						<h2 className="font-bold">
+							{adoptSuccess ? 'Application Created' : 'Confirm Application'}
+						</h2>
+						<div>
 							<div className="flex py-4">
-								<p className="">Are you sure you want to adopt this pet?</p>
+								<p className="">
+									{adoptSuccess
+										? 'Application for adoption created successfully. Please check your applications page.'
+										: 'Are you sure you want to adopt this pet?'}
+								</p>
 							</div>
 							<div className="flex justify-end">
-								<button
-									type="submit"
-									className="mt-4 bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded"
-								>
-									Confirm
-								</button>
+								{adoptSuccess ? (
+									<button
+										onClick={() => okay()}
+										type="submit"
+										className="mt-4 bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded"
+									>
+										Okay
+									</button>
+								) : (
+									<button
+										onClick={() => adoptPet()}
+										type="submit"
+										className="mt-4 bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded"
+									>
+										Confirm
+									</button>
+								)}
 							</div>
-						</form>
+						</div>
 					</div>
 				</div>
 			)}

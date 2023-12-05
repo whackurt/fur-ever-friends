@@ -1,82 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PetCard from '../../components/Pet/PetCard';
+import { GetPets } from '../../services/Pet/pet.services';
 
 const Home = () => {
+	const [pets, setPets] = useState([]);
+
+	useEffect(() => {
+		const getAllPets = async () => {
+			const res = await GetPets();
+			console.log(res.data.data.pets);
+			setPets(res.data.data.pets);
+		};
+
+		getAllPets();
+	}, []);
+
 	return (
 		<div className="flex justify-center">
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 py-4 gap-x-3">
-				<div className="col-span-1">
-					<PetCard
-						id={'83459832809898989'}
-						photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
-						name="Pet Name"
-						age="2"
-						breed="Labrador"
-					/>
-				</div>
-				<div className="col-span-1">
-					<PetCard
-						id={'83459832809898989'}
-						photo="https://images.squarespace-cdn.com/content/v1/53a60116e4b0488fb14d69d8/1597336605370-5BEYBPCYKAZEMWC4J7KQ/image-asset.jpeg"
-						name="Pet Name"
-						age="2"
-						breed="Labrador"
-					/>
-				</div>
-				<div className="col-span-1">
-					<PetCard
-						id={'83459832809898989'}
-						photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
-						name="Pet Name"
-						age="2"
-						breed="Labrador"
-					/>
-				</div>
-				<div className="col-span-1">
-					<PetCard
-						id={'83459832809898989'}
-						photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
-						name="Pet Name"
-						age="2"
-						breed="Labrador"
-					/>
-				</div>
-				<div className="col-span-1">
-					<PetCard
-						id={'83459832809898989'}
-						photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
-						name="Pet Name"
-						age="2"
-						breed="Labrador"
-					/>
-				</div>
-				<div className="col-span-1">
-					<PetCard
-						id={'83459832809898989'}
-						photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
-						name="Pet Name"
-						age="2"
-						breed="Labrador"
-					/>
-				</div>
-				<div className="col-span-1">
-					<PetCard
-						id={'83459832809898989'}
-						photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
-						name="Pet Name"
-						age="2"
-						breed="Labrador"
-					/>
-				</div>
-				<div className="col-span-1">
-					<PetCard
-						id={'83459832809898989'}
-						photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
-						name="Pet Name"
-						age="2"
-						breed="Labrador"
-					/>
-				</div>
+				{pets?.map((pet) => (
+					<div className="col-span-1">
+						<PetCard
+							id={pet._id}
+							photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
+							name={pet.name}
+							age={pet.age}
+							breed={pet.breed}
+						/>
+					</div>
+				))}
 			</div>
 		</div>
 	);
