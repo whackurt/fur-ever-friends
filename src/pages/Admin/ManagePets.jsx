@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdOpenInNew } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 import Button from '../../components/Button';
 import { FaRegEdit } from 'react-icons/fa';
 import { MdDeleteOutline } from 'react-icons/md';
+import { GetPets } from '../../services/Pet/pet.services';
 
 const ManagePets = () => {
 	const [showModal, setShowModal] = useState(false);
+	const [pets, setPets] = useState([]);
 	const [formData, setFormData] = useState({
 		name: '',
 		animalType: '',
@@ -29,10 +31,19 @@ const ManagePets = () => {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
-		console.log(formData);
-		setShowModal(false);
 	};
+
+	const getPets = async () => {
+		const res = await GetPets();
+		console.log(res);
+		if (res.status === 200) {
+			setPets(res.data.data.pets);
+		}
+	};
+
+	useEffect(() => {
+		getPets();
+	}, []);
 
 	return (
 		<div className="relative overflow-x-auto">
@@ -175,54 +186,42 @@ const ManagePets = () => {
 					</tr>
 				</thead>
 				<tbody>
-					<tr className="bg-white border-b ">
-						<th
-							scope="row"
-							className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-						>
-							Coffee
-						</th>
-						<td className="px-6 py-4">Dog</td>
-						<td className="px-6 py-4">Jack Russell</td>
-						<td className="px-6 py-4">1</td>
-						<td className="px-6 py-4">Php 6000</td>
-						<td className="px-6 py-4">Available</td>
-						<td className="px-6 py-4">
-							<div className="flex gap-x-2">
-								<button onClick={toggleModal}>
-									<FaRegEdit color="#246b07" size={20} />
-									{/* Edit */}
-								</button>
-								<button>
-									<MdDeleteOutline color="#b50e1a" size={20} />
-								</button>
-							</div>
-						</td>
-					</tr>
-					<tr className="bg-white border-b ">
-						<th
-							scope="row"
-							className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-						>
-							Coffee
-						</th>
-						<td className="px-6 py-4">Dog</td>
-						<td className="px-6 py-4">Jack Russell</td>
-						<td className="px-6 py-4">1</td>
-						<td className="px-6 py-4">Php 6000</td>
-						<td className="px-6 py-4">Available</td>
-						<td className="px-6 py-4">
-							<div className="flex gap-x-2">
-								<button onClick={toggleModal}>
-									<FaRegEdit color="#246b07" size={20} />
-									{/* Edit */}
-								</button>
-								<button>
-									<MdDeleteOutline color="#b50e1a" size={20} />
-								</button>
-							</div>
-						</td>
-					</tr>
+					{pets.map((pet) => (
+						<tr key={pet._id} className="bg-white border-b ">
+							<th
+								scope="row"
+								className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+							>
+								{pet.name}
+							</th>
+							<td className="px-6 py-4">{pet.animalType}</td>
+							<td className="px-6 py-4">{pet.breed}</td>
+							<td className="px-6 py-4">{pet.age}</td>
+							<td className="px-6 py-4">Php {pet.adoptionFee}.00</td>
+							<td className="px-6 py-4">
+								<div className="flex">
+									<p
+										className={`px-2 py-1 rounded text-white  ${
+											pet.availableForAdoption ? 'bg-green-600' : 'bg-red-600'
+										}`}
+									>
+										{pet.availableForAdoption ? 'Available' : 'Adopted'}
+									</p>
+								</div>
+							</td>
+							<td className="px-6 py-4">
+								<div className="flex gap-x-2">
+									<button onClick={toggleModal}>
+										<FaRegEdit color="#246b07" size={20} />
+										{/* Edit */}
+									</button>
+									<button>
+										<MdDeleteOutline color="#b50e1a" size={20} />
+									</button>
+								</div>
+							</td>
+						</tr>
+					))}
 				</tbody>
 			</table>
 		</div>
