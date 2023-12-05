@@ -3,7 +3,7 @@ import { MdOutlineDashboard, MdOutlinePets } from 'react-icons/md';
 import Control from '../../../src/assets/control.png';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/fur-ever-friends.png';
-
+import Button from '../Button';
 const AdminLayout = ({ children, location }) => {
 	const [open, setOpen] = useState(true);
 	const navigate = useNavigate();
@@ -45,13 +45,6 @@ const AdminLayout = ({ children, location }) => {
 							open && 'rotate-[360deg]'
 						}`}
 					/>
-					{/* <h1
-						className={`text-primary origin-left font-medium text-xl duration-200 ${
-							!open && 'scale-0'
-						}`}
-					>
-						Fur-ever Friends Haven
-					</h1> */}
 				</div>
 				<ul className="pt-6">
 					{Menus.map((Menu, index) => (
@@ -88,7 +81,7 @@ const AdminLayout = ({ children, location }) => {
 					<p className="font-medium">
 						Admin {'>'} {location}
 					</p>
-					<button
+					<Button
 						onClick={() => {
 							localStorage.clear();
 							navigate('/admin/login');
@@ -96,7 +89,7 @@ const AdminLayout = ({ children, location }) => {
 						className="bg-primary hover:bg-secondary text-white px-2 py-1 rounded text-sm font-medium"
 					>
 						Log out
-					</button>
+					</Button>
 				</div>
 				<div className="bg-white my-4 rounded-md p-4 text-gray-700">
 					{children}
