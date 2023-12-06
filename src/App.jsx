@@ -8,8 +8,7 @@ import ManagePets from './pages/Admin/ManagePets';
 import Home from './pages/Adopter/Home';
 import ViewPet from './pages/Adopter/ViewPet';
 import ConfirmAdoption from './pages/Adopter/ConfirmAdoption';
-import Applications from './pages/Applications/Applications';
-import ViewSingleApplication from './pages/Applications/ViewSingleApplication';
+import Applications from './pages/Adopter/Applications';
 import AdminLayout from './components/Layouts/AdminLayout';
 import AdopterLayout from './components/Layouts/AdopterLayout';
 import { ViewApplication } from './pages/Admin/ViewApplication';
@@ -32,7 +31,7 @@ const App = () => {
 						}
 					/>
 					<Route
-						path="/auth/signup"
+						path="/signup"
 						element={
 							<AuthenticatedPrivateRoute>
 								<AdopterSignup />
@@ -40,7 +39,7 @@ const App = () => {
 						}
 					/>
 					<Route
-						path="/auth/login"
+						path="/login"
 						element={
 							<AuthenticatedPrivateRoute>
 								<AdopterLogin />
@@ -93,9 +92,9 @@ const App = () => {
 
 					{/* Adopter Routes */}
 					<Route
-						path="/"
+						path="/pet"
 						element={
-							<PrivateRoute user={'adopter'} redirect={'/auth/login'}>
+							<PrivateRoute user={'adopter'} redirect={'/login'}>
 								<AdopterLayout location={'Home'} children={<Home />} />
 							</PrivateRoute>
 						}
@@ -103,7 +102,7 @@ const App = () => {
 					<Route
 						path="/pet/:id"
 						element={
-							<PrivateRoute user={'adopter'} redirect={'/auth/login'}>
+							<PrivateRoute user={'adopter'} redirect={'/login'}>
 								<AdopterLayout location={'Home'} children={<ViewPet />} />
 							</PrivateRoute>
 						}
@@ -111,7 +110,7 @@ const App = () => {
 					<Route
 						path="/pet/adopt/confirm/:id"
 						element={
-							<PrivateRoute user={'adopter'} redirect={'/auth/login'}>
+							<PrivateRoute user={'adopter'} redirect={'/login'}>
 								<AdopterLayout
 									location={'Home'}
 									children={<ConfirmAdoption />}
@@ -122,21 +121,10 @@ const App = () => {
 					<Route
 						path="/applications"
 						element={
-							<PrivateRoute user={'adopter'} redirect={'/auth/login'}>
+							<PrivateRoute user={'adopter'} redirect={'/login'}>
 								<AdopterLayout
 									location={'Applications'}
 									children={<Applications />}
-								/>
-							</PrivateRoute>
-						}
-					/>
-					<Route
-						path="/applications/:id"
-						element={
-							<PrivateRoute user={'adopter'} redirect={'/auth/login'}>
-								<AdopterLayout
-									location={'Applications'}
-									children={<ViewSingleApplication />}
 								/>
 							</PrivateRoute>
 						}
