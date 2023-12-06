@@ -1,4 +1,4 @@
-import { api } from '../API/axios';
+import { api } from './axios';
 
 export const LoginAdmin = async (creds) => {
 	try {
