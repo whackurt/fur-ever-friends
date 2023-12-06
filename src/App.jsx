@@ -100,6 +100,7 @@ const App = () => {
 						}
 					/>
 					<Route
+						exact
 						path="/pet/:id"
 						element={
 							<PrivateRoute user={'adopter'} redirect={'/login'}>

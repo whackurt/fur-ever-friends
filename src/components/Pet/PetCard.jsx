@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 const PetCard = ({ photo, name, age, breed, id, availableForAdoption }) => {
 	return (
 		<Link to={`/pet/${id}`}>
-			<div className=" max-w-sm rounded-lg shadow-lg my-4  h-[280px] overflow-y-hidden">
+			<div className="h-[310px] max-w-sm rounded-lg shadow-lg my-4 overflow-y-hidden">
 				<div className="flex relative justify-end">
 					<div
 						className={`absolute top-1 right-1 flex ml-auto ${
@@ -22,7 +22,7 @@ const PetCard = ({ photo, name, age, breed, id, availableForAdoption }) => {
 						{name}
 					</div>
 					<p className="text-gray-700 text-base">
-						<span className="font-semibold">Age :</span> {age} yr/s,{' '}
+						<span className="font-semibold">Age :</span> {age} yr/s, <br />
 						<span className="font-semibold">Breed :</span> {breed}
 					</p>
 				</div>

@@ -42,6 +42,7 @@ const Navbar = ({ location }) => {
       text-gray-800"
 				>
 					<img
+						onClick={() => navigate('/pet')}
 						width={150}
 						height={40}
 						src={Logo}

@@ -8,12 +8,15 @@ import {
 	DeletePetById,
 	GetPets,
 	UpdatePetById,
+	UploadPetImage,
 } from '../../services/pet.services';
 
 const ManagePets = () => {
 	const [showModal, setShowModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 	const [deleteSuccess, setDeleteSuccess] = useState(false);
+	const [loading, setLoading] = useState(false);
+	const [img, setImg] = useState(null);
 
 	const [idToEdit, setIdToEdit] = useState(null);
 	const [idToDelete, setIdToDelete] = useState(null);
@@ -43,11 +46,51 @@ const ManagePets = () => {
 	};
 
 	const saveUpdate = async () => {
-		const res = await UpdatePetById(petDetails[0]._id, updates);
-		if (res.status === 200) {
-			setShowModal(false);
-			setUpdates({});
-			getPets();
+		try {
+			var imgUrls = [];
+			var updatedPic = false;
+			var updatesEmpty = Object.keys(updates).length === 0;
+
+			if (img != null) {
+				setLoading(true);
+
+				for (let i = 0; i < img.length; i++) {
+					const url = await UploadPetImage(img[i]);
+					imgUrls.push(url);
+				}
+
+				if (imgUrls.length > 0) {
+					const res = await UpdatePetById(petDetails[0]._id, {
+						photos: imgUrls,
+					});
+
+					if (res.status === 200) {
+						updatedPic = true;
+
+						if (updatesEmpty) {
+							setShowModal(false);
+							setImg(null);
+							getPets();
+						}
+					}
+				}
+			}
+
+			if (!updatesEmpty) {
+				setLoading(true);
+
+				const res = await UpdatePetById(petDetails[0]._id, updates);
+
+				if (res.status === 200 || updatedPic) {
+					setShowModal(false);
+					setUpdates({});
+					getPets();
+				}
+			}
+
+			setLoading(false);
+		} catch (error) {
+			console.log(error);
 		}
 	};
 
@@ -68,6 +111,10 @@ const ManagePets = () => {
 
 	useEffect(() => {
 		getPets();
+	}, []);
+
+	useEffect(() => {
+		console.log(updates);
 	}, []);
 
 	useEffect(() => {
@@ -195,12 +242,36 @@ const ManagePets = () => {
 										className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
 									/>
 								</div>
+								<div className="mb-4">
+									<label
+										htmlFor="adoptionfee"
+										className="block text-gray-700 font-medium mb-2"
+									>
+										Photos
+									</label>
+									<div className="flex gap-x-2 pb-2 items-end">
+										{petDetails[0]?.photos.map((photo) => (
+											<div className="col-span-1">
+												<img src={photo} width={100} alt={photo} />
+											</div>
+										))}
+									</div>
+									<input
+										type="file"
+										accept="image/*"
+										id="photos"
+										multiple
+										name="photos"
+										onChange={(e) => setImg(e.target.files)}
+										className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+									/>
+								</div>
 								<button
 									onClick={() => saveUpdate()}
 									type="submit"
 									className="w-full bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded"
 								>
-									Save Changes
+									{loading ? 'Saving...' : 'Save Changes'}
 								</button>
 							</form>
 						</div>
@@ -276,6 +347,9 @@ const ManagePets = () => {
 							Adoption Fee
 						</th>
 						<th scope="col" className="px-6 py-3">
+							Photos
+						</th>
+						<th scope="col" className="px-6 py-3">
 							Status
 						</th>
 						<th scope="col" className="px-6 py-3">
@@ -296,6 +370,13 @@ const ManagePets = () => {
 							<td className="px-6 py-4">{pet.breed}</td>
 							<td className="px-6 py-4">{pet.age}</td>
 							<td className="px-6 py-4">Php {pet.adoptionFee}.00</td>
+							<td className="px-6 py-4">
+								<div className="flex gap-x-1">
+									{pet.photos.map((photo) => (
+										<img key={photo} src={photo} width={50} alt="" />
+									))}
+								</div>
+							</td>
 							<td className="px-6 py-4">
 								<div className="flex text-xs">
 									<p

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { CreatePet } from '../../services/pet.services';
+import { CreatePet, UploadPetImage } from '../../services/pet.services';
 import { useNavigate } from 'react-router-dom';
 
 const AddNewPet = () => {
 	const [addSuccess, setAddSuccess] = useState(false);
+	const [img, setImg] = useState(null);
 	const [showModal, setShowModal] = useState(false);
+	const [loading, setLoading] = useState(false);
+
 	const [formData, setFormData] = useState({
 		name: '',
 		animalType: '',
@@ -16,22 +19,34 @@ const AddNewPet = () => {
 	const navigate = useNavigate();
 
 	const addPet = async () => {
+		setLoading(true);
+
+		var imgUrls = [];
+
+		for (let i = 0; i < img.length; i++) {
+			const imgUrl = await UploadPetImage(img[i]);
+			imgUrls.push(imgUrl);
+		}
+
 		const res = await CreatePet({
 			name: formData.name,
 			animalType: formData.animalType,
 			breed: formData.breed,
 			age: formData.age,
 			adoptionFee: formData.adoptionFee,
+			photos: imgUrls,
 		});
 
 		if (res.status === 201) {
 			setAddSuccess(true);
-			toggleModal();
 		}
+
+		setLoading(false);
 	};
 
 	const okay = () => {
-		setShowModal(false);
+		// toggleModal();
+		setAddSuccess(false);
 		setFormData({
 			name: '',
 			animalType: '',
@@ -39,7 +54,9 @@ const AddNewPet = () => {
 			age: '',
 			adoptionFee: '',
 		});
-		navigate('/admin/manage-pets');
+		setImg(null);
+
+		// navigate('/admin/manage-pets');
 	};
 
 	const toggleModal = () => {
@@ -168,13 +185,30 @@ const AddNewPet = () => {
 							className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
 						/>
 					</div>
+					<div className="mb-4">
+						<label
+							htmlFor="adoptionfee"
+							className="block text-gray-700 font-medium mb-2"
+						>
+							Photos
+						</label>
+						<input
+							type="file"
+							accept="image/*"
+							id="photos"
+							multiple
+							name="photos"
+							onChange={(e) => setImg(e.target.files)}
+							className="w-full border border-gray-300 rounded-md py-2 px-3 focus:outline-none focus:border-blue-500"
+						/>
+					</div>
 				</div>
 				<button
 					onClick={() => addPet()}
 					type="submit"
 					className="bg-primary w-full hover:bg-secondary text-white font-bold py-2 px-4 rounded"
 				>
-					Add Pet
+					{loading ? 'Adding pet...' : 'Add Pet'}
 				</button>
 			</div>
 		</div>

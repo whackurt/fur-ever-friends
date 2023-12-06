@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { api } from './axios';
 
 export const CreatePet = async (petData) => {
@@ -42,5 +43,29 @@ export const DeletePetById = async (id) => {
 		return res;
 	} catch (error) {
 		return { error: error.message };
+	}
+};
+
+export const UploadPetImage = async (imgFile) => {
+	try {
+		const data = new FormData();
+
+		data.append('file', imgFile);
+		data.append('upload_preset', 'gobt82b5');
+
+		try {
+			let cloudName = 'dyi2sla5u';
+			let resourceType = 'image';
+			let api = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
+			const res = await axios.post(api, data);
+			const { secure_url } = res.data;
+
+			return secure_url;
+		} catch (error) {
+			console.error(error);
+		}
+	} catch (error) {
+		console.error(error);
 	}
 };

@@ -33,7 +33,7 @@ const Home = () => {
 						<div className="col-span-1">
 							<PetCard
 								id={pet._id}
-								photo="https://www.pedigree.in/cdn-cgi/image/format=auto,q=90/sites/g/files/fnmzdf4446/files/2023-01/Puppy-Nutrition-Image-detail.png"
+								photo={pet.photos[0]}
 								name={pet.name}
 								age={pet.age}
 								breed={pet.breed}
