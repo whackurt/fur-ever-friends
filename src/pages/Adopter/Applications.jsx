@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
 import { MdDeleteOutline } from 'react-icons/md';
 import {
 	DeleteApplicationById,
 	GetApplicationByAdopterId,
-} from '../../services/Applications/applications.services';
+} from '../../services/applications.services';
 import moment from 'moment/moment';
 
 const Applications = () => {
-	let { id } = useParams();
 	const [showModal, setShowModal] = useState(false);
 	const [applications, setApplications] = useState([]);
 	const [idToDelete, setIdToDelete] = useState(null);
@@ -81,7 +79,7 @@ const Applications = () => {
 									<button
 										onClick={() => revoke()}
 										type="submit"
-										className="mt-4 bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded"
+										className="mt-4 bg-red-600 hover:bg-red-500 text-white font-bold py-2 px-4 rounded"
 									>
 										Revoke
 									</button>
