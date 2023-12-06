@@ -372,7 +372,7 @@ const ManagePets = () => {
 							<td className="px-6 py-4">Php {pet.adoptionFee}.00</td>
 							<td className="px-6 py-4">
 								<div className="flex gap-x-1">
-									{pet.photos.map((photo) => (
+									{pet.photos.slice(0, 3).map((photo) => (
 										<img key={photo} src={photo} width={50} alt="" />
 									))}
 								</div>

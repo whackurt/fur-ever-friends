@@ -5,9 +5,6 @@ const PrivateRoute = ({ redirect, children, user }) => {
 	if (!localStorage.getItem('adminToken') && user === 'admin') {
 		return <Navigate to={redirect} replace />;
 	}
-	if (!localStorage.getItem('adopterToken') && user === 'adopter') {
-		return <Navigate to={redirect} replace />;
-	}
 	return children;
 };
 
