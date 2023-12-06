@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { GetPetById } from '../../services/Pet/pet.services';
-import { CreateApplication } from '../../services/Applications/applications.services';
+import { GetPetById } from '../../services/pet.services';
+import { CreateApplication } from '../../services/applications.services';
 
 const ViewPet = () => {
 	const { id } = useParams();
@@ -45,7 +45,7 @@ const ViewPet = () => {
 	}, []);
 
 	return (
-		<div className="container mx-4 my-8 p-4 bg-white rounded shadow-lg w-3/4">
+		<div className="container mx-4 my-8 p-4 bg-white rounded shadow-lg ">
 			{showModal && (
 				<div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
 					<div className="absolute bg-white w-2/3 md:w-1/2 lg:w-1/3 p-6 rounded shadow-lg">
@@ -89,9 +89,9 @@ const ViewPet = () => {
 					</div>
 				</div>
 			)}
-			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 				{/* Left section for image */}
-				<div>
+				<div className="col-span-2">
 					<img
 						src="https://images.squarespace-cdn.com/content/v1/53a60116e4b0488fb14d69d8/1597336605370-5BEYBPCYKAZEMWC4J7KQ/image-asset.jpeg"
 						alt={petDetails.name}
@@ -100,47 +100,44 @@ const ViewPet = () => {
 				</div>
 
 				{/* Right section for pet details */}
-				<div className="text-left">
-					<div className="flex flex-col">
-						<div className="">
-							<h1 className="text-2xl font-bold">{petDetails.name}</h1>
-							<hr />
-							<p className="py-2">
-								<span className="font-medium text-gray-700">Animal Type: </span>{' '}
-								{petDetails.animalType}
-							</p>
-							<p className="py-2">
-								<span className="font-medium text-gray-700">Breed: </span>{' '}
-								{petDetails.breed}
-							</p>
-							<p className="py-2">
-								<span className="font-medium text-gray-700">Age: </span>{' '}
-								{petDetails.age} year/s
-							</p>
-							<p className="py-2">
-								<span className="font-medium text-gray-700">
-									Adoption Fee:{' '}
-								</span>{' '}
-								Php {petDetails.adoptionFee}
-							</p>
-							<p className="py-2">
-								<span className="font-medium text-gray-700">
-									Available for Adoption:{' '}
-								</span>{' '}
-								{petDetails.availableForAdoption ? 'Yes' : 'No'}
-							</p>
-
-							<button
-								disabled={!petDetails.availableForAdoption}
-								onClick={toggleModal}
-								className="bg-primary w-full hover:bg-secondary text-white font-bold py-2 px-4 rounded"
-							>
-								Adopt
-							</button>
-						</div>
+				<div className="col-span-1 flex flex-col justify-center text-left">
+					<div className="">
+						<h1 className="text-2xl font-bold">{petDetails.name}</h1>
+						<hr />
+						<p className="py-2">
+							<span className="font-medium text-gray-700">Animal Type: </span>{' '}
+							{petDetails.animalType}
+						</p>
+						<p className="py-2">
+							<span className="font-medium text-gray-700">Breed: </span>{' '}
+							{petDetails.breed}
+						</p>
+						<p className="py-2">
+							<span className="font-medium text-gray-700">Age: </span>{' '}
+							{petDetails.age} year/s
+						</p>
+						<p className="py-2">
+							<span className="font-medium text-gray-700">Adoption Fee: </span>{' '}
+							Php {petDetails.adoptionFee}
+						</p>
+						<p className="py-2">
+							<span className="font-medium text-gray-700">
+								Available for Adoption:{' '}
+							</span>{' '}
+							{petDetails.availableForAdoption ? 'Yes' : 'No'}
+						</p>
 					</div>
-
-					{/* Add more pet details here */}
+					<button
+						disabled={!petDetails.availableForAdoption}
+						onClick={toggleModal}
+						className={` ${
+							!petDetails.availableForAdoption
+								? 'bg-gray-500 hover:bg-none'
+								: 'hover:bg-secondary bg-primary'
+						} w-full  text-white font-semibold py-2 px-4 rounded`}
+					>
+						Adopt
+					</button>
 				</div>
 			</div>
 		</div>
