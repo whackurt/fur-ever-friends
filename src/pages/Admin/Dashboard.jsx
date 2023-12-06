@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import {
 	DeleteApplicationById,
 	GetApplications,
-} from '../../services/Applications/applications.services';
+} from '../../services/applications.services';
 
 const Dashboard = () => {
 	const [applications, setApplications] = useState([]);
@@ -61,19 +61,21 @@ const Dashboard = () => {
 							<td className="px-6 py-4">{app.petId?.name}</td>
 							<td className="px-6 py-4">
 								<div
-									className={`${
+									className={`flex justify-center text-xs ${
 										app.status === 0
 											? 'bg-yellow-600 '
 											: app.status === 1
 											? 'bg-green-600 '
 											: 'bg-red-600'
-									} px-2 py-1 rounded-md text- text-center text-white`}
+									} px-2 w-[70px] py-1 rounded text-white`}
 								>
-									{app.status === 0
-										? 'Pending'
-										: app.status === 1
-										? 'Approved'
-										: 'Rejected'}
+									<p>
+										{app.status === 0
+											? 'Pending'
+											: app.status === 1
+											? 'Approved'
+											: 'Rejected'}
+									</p>
 								</div>
 							</td>
 							<td className="px-6 py-4">
@@ -87,7 +89,7 @@ const Dashboard = () => {
 											getApplications();
 										}}
 									>
-										<MdDeleteOutline size={20} />
+										<MdDeleteOutline color="#b50e1a" size={20} />
 									</button>
 								</div>
 							</td>

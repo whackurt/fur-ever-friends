@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import {
 	GetApplicationById,
 	UpdateApplicationById,
-} from '../../services/Applications/applications.services';
-import { UpdatePetById } from '../../services/Pet/pet.services';
+} from '../../services/applications.services';
+import { UpdatePetById } from '../../services/pet.services';
 
 export const ViewApplication = () => {
 	let { id } = useParams();
