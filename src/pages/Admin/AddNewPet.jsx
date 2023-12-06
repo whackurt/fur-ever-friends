@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreatePet } from '../../services/Pet/pet.services';
+import { CreatePet } from '../../services/pet.services';
 import { useNavigate } from 'react-router-dom';
 
 const AddNewPet = () => {
