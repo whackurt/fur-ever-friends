@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LoginAdopter } from '../../services/Auth/auth';
+import { LoginAdopter } from '../../services/auth';
 import Logo from '../../assets/fur-ever-friends.png';
 
 const AdopterLogin = () => {
@@ -20,7 +20,7 @@ const AdopterLogin = () => {
 		if (res.status == 200) {
 			localStorage.setItem('adopterToken', res.data.adopterToken);
 			localStorage.setItem('adopterId', res.data.id);
-			navigate('/');
+			navigate('/pet');
 		} else {
 			setError(true);
 		}
@@ -45,7 +45,7 @@ const AdopterLogin = () => {
 							<input
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-								className="border p-2"
+								className="border p-2 rounded-md"
 								type="email"
 							/>
 						</div>
@@ -54,7 +54,7 @@ const AdopterLogin = () => {
 							<input
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
-								className="border p-2"
+								className="border p-2 rounded-md"
 								type="password"
 							/>
 						</div>
@@ -69,11 +69,14 @@ const AdopterLogin = () => {
 						{loading ? 'Logging in...' : 'Log In'}
 					</button>
 					<div className="flex justify-center">
-						<p className="text-xs">New to Pet Adoption System? </p>
-						<Link
-							to={'/auth/signup'}
-							className="font-medium text-xs text-primary"
-						>
+						<p className="text-xs">
+							New to{' '}
+							<span className="font-semibold text-primary">
+								{' '}
+								Fur-Ever Friends Haven?{' '}
+							</span>
+						</p>
+						<Link to={'/signup'} className="font-medium text-xs text-primary">
 							{' '}
 							Create an account
 						</Link>

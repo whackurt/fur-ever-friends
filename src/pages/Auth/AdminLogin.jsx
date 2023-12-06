@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LoginAdmin } from '../../services/Auth/auth';
+import { LoginAdmin } from '../../services/auth';
 import { useNavigate } from 'react-router-dom';
 import Logo from '../../assets/fur-ever-friends.png';
 
@@ -43,7 +43,7 @@ const AdminLogin = () => {
 							<input
 								value={username}
 								onChange={(e) => setUsername(e.target.value)}
-								className="border p-2"
+								className="border p-2 rounded-md"
 								type="text"
 							/>
 						</div>
@@ -52,7 +52,7 @@ const AdminLogin = () => {
 							<input
 								value={password}
 								onChange={(e) => setPassword(e.target.value)}
-								className="border p-2"
+								className="border p-2 rounded-md"
 								type="password"
 							/>
 						</div>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { LoginAdopter, SignupAdopter } from '../../services/Auth/auth';
+import { LoginAdopter, SignupAdopter } from '../../services/auth';
 import Logo from '../../assets/fur-ever-friends.png';
 
 const AdopterSignup = () => {
@@ -31,7 +31,7 @@ const AdopterSignup = () => {
 			if (res.status == 200) {
 				localStorage.setItem('adopterToken', res.data.adopterToken);
 				localStorage.setItem('adopterId', res.data.id);
-				navigate('/');
+				navigate('/pet');
 			}
 		} else {
 			setError(true);
@@ -114,10 +114,7 @@ const AdopterSignup = () => {
 					</button>
 					<div className="flex justify-center">
 						<p className="text-xs">Already have an account? </p>
-						<Link
-							to={'/auth/login'}
-							className="font-medium text-xs text-primary"
-						>
+						<Link to={'/login'} className="font-medium text-xs text-primary">
 							{' '}
 							Log in
 						</Link>
