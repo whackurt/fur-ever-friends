@@ -1,17 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../Button';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/fur-ever-friends.png';
+import { GetAdopterById } from '../../services/adopter.services';
 const Navbar = ({ location }) => {
 	let Links = [
-		{ name: 'Home', link: '/' },
+		{ name: 'Home', link: '/pet' },
 		{ name: 'Applications', link: '/applications' },
 	];
+	const [adopterData, setAdopterData] = useState({});
 	let [open, setOpen] = useState(false);
+	const [isOpen, setIsOpen] = useState(false);
+
+	const toggleDropdown = () => {
+		setIsOpen(!isOpen);
+	};
+
+	const logout = () => {
+		// Implement logout functionality here
+		console.log('Logged out');
+	};
 	const navigate = useNavigate();
 
+	useEffect(() => {
+		const getAdopter = async () => {
+			const res = await GetAdopterById(localStorage.getItem('adopterId'));
+			if (res.status === 200) {
+				setAdopterData(res.data.adopter);
+			}
+			console.log(adopterData);
+		};
+
+		getAdopter();
+	}, []);
+
 	return (
-		<div className="shadow-md w-full fixed top-0 left-0">
+		<div className="z-50 shadow-md w-full fixed top-0 left-0">
 			<div className="md:flex items-center justify-between bg-white py-4 md:px-10 px-7">
 				<div
 					className="font-bold text-2xl cursor-pointer flex items-center font-[Poppins] gap-x-3
@@ -25,6 +49,7 @@ const Navbar = ({ location }) => {
 							open && 'rotate-[360deg]'
 						}`}
 					/>
+					<p>{adopterData.name}</p>
 				</div>
 
 				<div
@@ -52,10 +77,55 @@ const Navbar = ({ location }) => {
 							</li>
 						</Link>
 					))}
+					{/* <div className="relative inline-block text-left">
+						<div className="flex items-center gap-x-4">
+							<p className="font-medium">{adopterData.name}</p>
+							<button
+								onClick={toggleDropdown}
+								type="button"
+								className="inline-flex justify-center items-center w-10 h-10 rounded-full bg-gray-200 text-gray-700 focus:outline-none"
+							>
+								<img
+									src="https://cdn-icons-png.flaticon.com/512/4021/4021443.png"
+									alt="Profile"
+									className="w-6 h-6"
+								/>
+							</button>
+						</div>
+						{isOpen && (
+							<div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+								<div
+									className="py-1"
+									role="menu"
+									aria-orientation="vertical"
+									aria-labelledby="options-menu"
+								>
+									<a
+										href="#"
+										className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										role="menuitem"
+									>
+										Profile
+									</a>
+									<button
+										onClick={() => {
+											localStorage.clear();
+											navigate('/auth/login');
+										}}
+										type="button"
+										className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+										role="menuitem"
+									>
+										Logout
+									</button>
+								</div>
+							</div>
+						)}
+					</div> */}
 					<Button
 						onClick={() => {
 							localStorage.clear();
-							navigate('/auth/login');
+							navigate('/login');
 						}}
 					>
 						Log out
