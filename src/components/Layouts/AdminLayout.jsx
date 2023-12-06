@@ -7,7 +7,6 @@ import Button from '../Button';
 const AdminLayout = ({ children, location }) => {
 	const [open, setOpen] = useState(true);
 	const navigate = useNavigate();
-	const activeColor = 'text-primary';
 
 	const Menus = [
 		{
@@ -41,9 +40,7 @@ const AdminLayout = ({ children, location }) => {
 						width={180}
 						height={100}
 						src={Logo}
-						className={`cursor-pointer duration-500 ${
-							open && 'rotate-[360deg]'
-						}`}
+						className={`cursor-pointer duration-500`}
 					/>
 				</div>
 				<ul className="pt-6">
