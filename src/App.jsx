@@ -92,6 +92,14 @@ const App = () => {
 
 					{/* Adopter Routes */}
 					<Route
+						path="/"
+						element={
+							<PrivateRoute user={'adopter'} redirect={'/login'}>
+								<AdopterLayout location={'Home'} children={<Home />} />
+							</PrivateRoute>
+						}
+					/>
+					<Route
 						path="/pet"
 						element={
 							<PrivateRoute user={'adopter'} redirect={'/login'}>
